@@ -18,6 +18,8 @@ document.addEventListener("DOMContentLoaded", () => {
     menuToggle?.setAttribute("aria-expanded", "false");
     siteNav?.classList.remove("is-open");
     document.body.classList.remove("menu-open");
+    dropdown?.classList.remove("is-open");
+    dropdownButton?.setAttribute("aria-expanded", "false");
   };
 
   menuToggle?.addEventListener("click", () => {
@@ -42,6 +44,14 @@ document.addEventListener("DOMContentLoaded", () => {
     if (dropdown && !dropdown.contains(event.target)) {
       dropdown.classList.remove("is-open");
       dropdownButton?.setAttribute("aria-expanded", "false");
+    }
+
+    if (
+      siteNav?.classList.contains("is-open") &&
+      !siteNav.contains(event.target) &&
+      !menuToggle?.contains(event.target)
+    ) {
+      closeMenu();
     }
   });
 
@@ -119,6 +129,56 @@ document.addEventListener("DOMContentLoaded", () => {
     localStorage.setItem("itsl-privacy-notice", "accepted");
     cookieBanner?.classList.remove("is-visible");
   });
+
+  const lightboxLinks = document.querySelectorAll("[data-lightbox]");
+  if (lightboxLinks.length) {
+    const lightbox = document.createElement("div");
+    lightbox.className = "lightbox";
+    lightbox.setAttribute("role", "dialog");
+    lightbox.setAttribute("aria-modal", "true");
+    lightbox.setAttribute("aria-label", "Projektbild vergrößert anzeigen");
+    lightbox.innerHTML = `
+      <button class="lightbox__close" type="button" aria-label="Bildansicht schließen">×</button>
+      <figure class="lightbox__figure">
+        <img class="lightbox__image" alt="" />
+        <figcaption class="lightbox__caption"></figcaption>
+      </figure>
+    `;
+    document.body.append(lightbox);
+
+    const lightboxImage = lightbox.querySelector(".lightbox__image");
+    const lightboxCaption = lightbox.querySelector(".lightbox__caption");
+    const lightboxClose = lightbox.querySelector(".lightbox__close");
+    let lastLightboxTrigger = null;
+
+    const closeLightbox = () => {
+      lightbox.classList.remove("is-open");
+      document.body.classList.remove("lightbox-open");
+      window.setTimeout(() => lastLightboxTrigger?.focus(), 220);
+    };
+
+    lightboxLinks.forEach((link) => {
+      link.addEventListener("click", (event) => {
+        event.preventDefault();
+        lastLightboxTrigger = link;
+        const preview = link.querySelector("img");
+        lightboxImage.src = link.href;
+        lightboxImage.alt = preview?.alt || "Vergrößerte Projektansicht";
+        lightboxCaption.textContent = link.dataset.lightboxCaption || preview?.alt || "";
+        lightbox.classList.add("is-open");
+        document.body.classList.add("lightbox-open");
+        lightboxClose.focus();
+      });
+    });
+
+    lightboxClose.addEventListener("click", closeLightbox);
+    lightbox.addEventListener("click", (event) => {
+      if (event.target === lightbox) closeLightbox();
+    });
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && lightbox.classList.contains("is-open")) closeLightbox();
+    });
+  }
 
   const contactForm = document.querySelector("[data-contact-form]");
   const formStatus = document.querySelector("[data-form-status]");
