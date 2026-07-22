@@ -442,6 +442,13 @@ _professionell, technisch_
 - [ ] Vorher-Nachher-Vergleich
 - [ ] ChatGPT Codex entscheidet passend zur Anzahl der Projekte
 
+**Verbindlicher Aufbau aller Referenz-Detailseiten:**
+- Unternehmensinformationen und Projektübersicht stehen direkt nach dem Hero-Bereich.
+- Danach folgt eine einheitliche Projektpräsentation nach dem Vorbild der Referenz „Hairdesign Barbara Leitner“.
+- Die Präsentation enthält ein großes Desktop-Hauptbild, zwei weitere Desktop-Ansichten, zwei mobile Ansichten in Smartphone-Rahmen und eine breite abschließende Detailansicht.
+- Solange noch keine finalen Bilder vorhanden sind, werden dieselben Bildpositionen mit klar beschrifteten Platzhaltern dargestellt.
+- Finale Screenshots erhalten Browser- beziehungsweise Smartphone-Rahmen, dezente Schatten, Hover-Animationen und eine Lightbox.
+
 ---
 
 ## 16. Kundenbewertungen

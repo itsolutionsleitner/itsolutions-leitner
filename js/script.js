@@ -119,14 +119,42 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const cookieBanner = document.querySelector(".cookie-banner");
   const cookieButton = document.querySelector("[data-cookie-accept]");
-  const cookieChoice = localStorage.getItem("itsl-privacy-notice");
+  const privacyNoticeKey = "itsl-privacy-notice";
+  const privacyNoticeDuration = 180 * 24 * 60 * 60 * 1000;
+  let privacyNoticeAcknowledged = false;
 
-  if (cookieBanner && !cookieChoice) {
+  try {
+    const storedPrivacyNotice = localStorage.getItem(privacyNoticeKey);
+
+    if (storedPrivacyNotice) {
+      const privacyNoticeChoice = JSON.parse(storedPrivacyNotice);
+      privacyNoticeAcknowledged =
+        privacyNoticeChoice?.acknowledged === true && privacyNoticeChoice.expiresAt > Date.now();
+
+      if (!privacyNoticeAcknowledged) {
+        localStorage.removeItem(privacyNoticeKey);
+      }
+    }
+  } catch {
+    privacyNoticeAcknowledged = false;
+  }
+
+  if (cookieBanner && !privacyNoticeAcknowledged) {
     window.setTimeout(() => cookieBanner.classList.add("is-visible"), 700);
   }
 
   cookieButton?.addEventListener("click", () => {
-    localStorage.setItem("itsl-privacy-notice", "accepted");
+    try {
+      localStorage.setItem(
+        privacyNoticeKey,
+        JSON.stringify({
+          acknowledged: true,
+          expiresAt: Date.now() + privacyNoticeDuration,
+        })
+      );
+    } catch {
+      // Der Hinweis kann auch geschlossen werden, wenn der Browser lokale Speicherung blockiert.
+    }
     cookieBanner?.classList.remove("is-visible");
   });
 
