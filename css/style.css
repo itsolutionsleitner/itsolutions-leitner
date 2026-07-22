@@ -2756,6 +2756,23 @@ body.lightbox-open {
     grid-template-columns: 1fr;
   }
 
+  .feature-grid--rows.project-values .feature-card {
+    grid-template-columns: 1fr;
+    row-gap: 0;
+  }
+
+  .feature-grid--rows.project-values .value-mark {
+    grid-row: auto;
+    grid-column: 1;
+    align-self: start;
+    margin: 0 0 14px;
+  }
+
+  .feature-grid--rows.project-values .feature-card h3,
+  .feature-grid--rows.project-values .feature-card p {
+    grid-column: 1;
+  }
+
   .footer-column:last-child {
     grid-column: auto;
   }
